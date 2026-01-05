@@ -1,0 +1,408 @@
+import React, { useState, useEffect } from 'react';
+import { 
+  ChevronRight, 
+  ChevronLeft, 
+  Brain, 
+  Zap, 
+  TrendingUp, 
+  ShieldCheck, 
+  Users, 
+  Layers, 
+  Target, 
+  Rocket,
+  Cpu,
+  Globe,
+  DollarSign,
+  PieChart,
+  Lightbulb,
+  Maximize2
+} from 'lucide-react';
+
+// --- CUSTOM CSS FOR ANIMATIONS & GLOWS ---
+const styles = `
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  
+  @keyframes pulseGlow {
+    0%, 100% { box-shadow: 0 0 15px rgba(210, 255, 5, 0.1); }
+    50% { box-shadow: 0 0 30px rgba(210, 255, 5, 0.3); }
+  }
+
+  .animate-fade-up {
+    animation: fadeUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    opacity: 0; /* Start hidden */
+  }
+
+  .delay-100 { animation-delay: 0.1s; }
+  .delay-200 { animation-delay: 0.2s; }
+  .delay-300 { animation-delay: 0.3s; }
+  .delay-400 { animation-delay: 0.4s; }
+
+  .glass-panel {
+    background: rgba(29, 38, 43, 0.7);
+    backdrop-filter: blur(24px);
+    -webkit-backdrop-filter: blur(24px);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+  }
+
+  .neon-text-shadow {
+    text-shadow: 0 0 20px rgba(210, 255, 5, 0.5);
+  }
+`;
+
+const PitchDeck = () => {
+  const [currentSlide, setCurrentSlide] = useState(0);
+  const [showTip, setShowTip] = useState(false);
+  const [loaded, setLoaded] = useState(false);
+
+  // Trigger animation reset on slide change
+  useEffect(() => {
+    setLoaded(false);
+    const timer = setTimeout(() => setLoaded(true), 10);
+    return () => clearTimeout(timer);
+  }, [currentSlide]);
+
+  const slides = [
+    {
+      id: 1,
+      title: "INTELLIGENCE, UNLEASHED.",
+      sub: "Scaling Human Brilliance Through Autonomous AI Agents.",
+      bullets: [
+        "The Shift: From 'using software' to 'managing outcomes.'",
+        "The Mission: Democratizing enterprise-grade AI agents.",
+        "The Promise: Your best employee is no longer hired—it’s downloaded."
+      ],
+      tip: "Open with: 'The future of work isn't about working harder. It's about cloning your best strategic moves.'",
+      icon: Brain,
+      visualType: "hero"
+    },
+    {
+      id: 2,
+      title: 'THE "HUMAN BOT" BOTTLENECK.',
+      sub: "Smart People Are Drowning in Dumb Work.",
+      bullets: [
+        "The Reality: 60% of talent time wasted on repetitive cognitive loops.",
+        "The Cost: Burnout at all-time highs; productivity plateaued.",
+        "The Gap: Current automation is rigid. Real work requires reasoning."
+      ],
+      tip: "Hit them with: 'You're paying your Senior Strategists $150k to copy-paste rows in Excel. We fixed that.'",
+      icon: Layers,
+      visualType: "iceberg"
+    },
+    {
+      id: 3,
+      title: "MEET THE AGENTIC OS.",
+      sub: "Autonomous Workers. Infinite Scale. Zero Burnout.",
+      bullets: [
+        "Beyond Chatbots: They don't just talk; they DO (Code, Negotiate, Transact).",
+        "Self-Healing: Agents detect errors and optimize paths.",
+        "Plug & Play: Integrates with Salesforce, Jira, Slack instantly."
+      ],
+      tip: "Use the phrase 'Digital Employee'. Shifts mindset from software to capacity.",
+      icon: Zap,
+      visualType: "split"
+    },
+    {
+      id: 4,
+      title: 'UNDER THE HOOD: THE "BRAIN"',
+      sub: "Perception. Reasoning. Action.",
+      bullets: [
+        "Ingest: Unstructured data (Email, PDF, Slack) in real-time.",
+        "Reason: LLM logic decides WHAT to do, not just how to reply.",
+        "Execute: API-first actions trigger payments or deploy code.",
+        "Learn: Feedback loops improve performance every interaction."
+      ],
+      tip: "Think of it as hiring a Harvard grad who processes 1M tokens per second.",
+      icon: Cpu,
+      visualType: "flow"
+    },
+    {
+      id: 5,
+      title: "THE TRILLION-DOLLAR OPPORTUNITY.",
+      sub: "Riding the Tsunami of the Century.",
+      bullets: [
+        "TAM: $2.6 Trillion (Global Labor Automation).",
+        "SAM: $150 Billion (High-value Knowledge Work).",
+        "SOM: $500 Million (Initial Focus: FinTech/Logistics).",
+        "Growth: 45% CAGR projected over next 5 years."
+      ],
+      tip: "We aren't fighting for software share. We're taking a slice of global payroll.",
+      icon: Globe,
+      visualType: "market"
+    },
+    {
+      id: 6,
+      title: "WE DON'T SELL SEATS. WE SELL OUTCOMES.",
+      sub: "Usage-Based Revenue Engine.",
+      bullets: [
+        "Model: Base Platform Fee + 'Compute/Action' Consumption.",
+        "Stickiness: Zero churn once workflow is learned.",
+        "Expansion: Land with Support Agent -> Upsell to DevOps Agent.",
+        "Margins: 85% Gross Margins at scale."
+      ],
+      tip: "Nobody fires the employee who works 24/7 for pennies.",
+      icon: DollarSign,
+      visualType: "revenue"
+    },
+    {
+      id: 7,
+      title: "WHY WE WIN.",
+      sub: "The 'Moat' is in the Proprietary Context Layer.",
+      bullets: [
+        "Context Window: Infinite long-term memory architecture.",
+        "Vertical Depth: Pre-trained on industry hard skills.",
+        "Security: Enterprise governance. Your data stays yours.",
+        "Speed: Deployment in minutes, not months."
+      ],
+      tip: "Throw shade: 'ChatGPT gives you a poem. We give you a signed contract.'",
+      icon: ShieldCheck,
+      visualType: "matrix"
+    },
+    {
+      id: 8,
+      title: "DOMINATION PLAN: PHASE 1 TO 3.",
+      sub: "Infiltrate. Integrate. Indispensable.",
+      bullets: [
+        "Phase 1: Target CTOs via 'Trojan Horse' free pilots.",
+        "Phase 2: Build 'Agent Marketplaces' for dev ecosystem.",
+        "Phase 3: Partner with legacy ERPs (SAP, Oracle)."
+      ],
+      tip: "We're building the developer ecosystem for the agentic age.",
+      icon: Target,
+      visualType: "timeline"
+    },
+    {
+      id: 9,
+      title: "VELOCITY SPEAKS.",
+      sub: "From Zero to Hero.",
+      bullets: [
+        "Users: 50+ Active Agents deployed in 4 weeks.",
+        "Revenue: 35% MoM growth since beta.",
+        "Partners: LOIs signed with 2 Fortune 500s.",
+        "Tech: Patent pending on 'Context-Recall' engine."
+      ],
+      tip: "Momentum is everything. If revenue is early, focus on usage intensity.",
+      icon: Rocket,
+      visualType: "graph"
+    },
+    {
+      id: 10,
+      title: "THE ARCHITECTS.",
+      sub: "Visionaries. Hackers. Executors.",
+      bullets: [
+        "Founder: The 'Gemini Whisperer'. AI Strategy Expert.",
+        "Tech Lead: Ex-Google. Built systems scaling to millions.",
+        "Growth Lead: Hype machine. Sales & GTM expert.",
+        "Advisors: Heavy hitters from FinTech & SaaS."
+      ],
+      tip: "We've failed enough to know exactly how to win.",
+      icon: Users,
+      visualType: "team"
+    },
+    {
+      id: 11,
+      title: "PATH TO $100M ARR.",
+      sub: "Conservative Logic. Aggressive Ambition.",
+      bullets: [
+        "Year 1: Validate & Iterate ($1.5M Rev).",
+        "Year 2: Scale GTM ($12M Rev).",
+        "Year 3: Market Dominance ($50M+ Rev).",
+        "LTV:CAC: > 4:1."
+      ],
+      tip: "These numbers assume we capture 0.01% of the market. Imagine 1%.",
+      icon: TrendingUp,
+      visualType: "financials"
+    },
+    {
+      id: 12,
+      title: "FUEL THE REVOLUTION.",
+      sub: "Raising $5M to Scale the Agentic Workforce.",
+      bullets: [
+        "50% Engineering (R&D)",
+        "30% Growth (Sales/Marketing)",
+        "20% Operations",
+        "Runway: 18 Months to Series A."
+      ],
+      tip: "Create FOMO. We are looking for strategic partners, not just capital.",
+      icon: PieChart,
+      visualType: "ask"
+    },
+    {
+      id: 13,
+      title: "THE LAST HUMAN-ONLY ERA IS OVER.",
+      sub: "Let's Build the Future, Together.",
+      bullets: [
+        "Huge Market + Proven Tech + Killer Team.",
+        "Don't just watch the revolution. Fund it."
+      ],
+      tip: "Leave this slide up. Make sure your email is visible.",
+      icon: Brain,
+      visualType: "hero"
+    }
+  ];
+
+  const nextSlide = () => {
+    if (currentSlide < slides.length - 1) {
+      setCurrentSlide(prev => prev + 1);
+      setShowTip(false);
+    }
+  };
+
+  const prevSlide = () => {
+    if (currentSlide > 0) {
+      setCurrentSlide(prev => prev - 1);
+      setShowTip(false);
+    }
+  };
+
+  useEffect(() => {
+    const handleKeyDown = (e) => {
+      if (e.key === 'ArrowRight') nextSlide();
+      if (e.key === 'ArrowLeft') prevSlide();
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [currentSlide]);
+
+  const CurrentIcon = slides[currentSlide].icon;
+
+  return (
+    <div className="min-h-screen bg-[#0B0E15] text-white font-sans selection:bg-[#D2FF05] selection:text-black overflow-hidden flex flex-col items-center justify-center relative">
+      <style>{styles}</style>
+      
+      {/* Background Ambience */}
+      <div className="absolute inset-0 z-0">
+        <div className="absolute top-[-20%] left-[-10%] w-[600px] h-[600px] bg-[#D2FF05] opacity-[0.03] rounded-full blur-[100px] animate-pulse"></div>
+        <div className="absolute bottom-[-20%] right-[-10%] w-[700px] h-[700px] bg-[#527D2D] opacity-[0.05] rounded-full blur-[120px]"></div>
+        {/* Grid Overlay */}
+        <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.02)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.02)_1px,transparent_1px)] bg-[size:50px_50px]"></div>
+      </div>
+
+      {/* Slide Container */}
+      <div className="relative z-10 w-full max-w-7xl aspect-video glass-panel shadow-2xl rounded-2xl overflow-hidden flex flex-col md:flex-row transition-all duration-500">
+        
+        {/* Left Sidebar (Progress) */}
+        <div className="w-full md:w-28 bg-[#0B0E15]/90 border-r border-[#ffffff05] flex md:flex-col items-center justify-between p-6 md:py-8 z-20">
+           {/* Logo Integration */}
+           <div className="mb-4">
+             <img src="https://iili.io/KUXIzXV.png" alt="Veralogix Logo" className="w-16 h-auto object-contain hover:drop-shadow-[0_0_8px_rgba(210,255,5,0.5)] transition-all duration-300" />
+           </div>
+
+           <div className="flex md:flex-col gap-2">
+             {slides.map((_, idx) => (
+               <button 
+                 key={idx}
+                 onClick={() => setCurrentSlide(idx)}
+                 className={`w-1.5 h-1.5 rounded-full transition-all duration-500 ${idx === currentSlide ? 'bg-[#D2FF05] h-6 shadow-[0_0_10px_#D2FF05]' : 'bg-gray-700 hover:bg-gray-500'}`}
+               />
+             ))}
+           </div>
+           
+           <div className="text-gray-600 font-mono text-[10px] tracking-widest mt-4">
+             {String(currentSlide + 1).padStart(2, '0')}/{String(slides.length).padStart(2, '0')}
+           </div>
+        </div>
+
+        {/* Main Content Area */}
+        <div className="flex-1 p-8 md:p-20 flex flex-col justify-center relative">
+            
+            {/* Confidential Marker */}
+            <div className="absolute top-8 right-8 flex items-center gap-2 opacity-30">
+               <ShieldCheck size={14} />
+               <span className="text-[10px] tracking-[0.3em] font-mono uppercase">Veralogix Confidential</span>
+            </div>
+
+            {/* Header Area */}
+            {loaded && (
+              <div className="mb-10 animate-fade-up">
+                <div className="flex items-center gap-3 mb-6">
+                   <div className="p-2.5 bg-[#D2FF05]/5 rounded-xl border border-[#D2FF05]/20 text-[#D2FF05] shadow-[0_0_15px_rgba(210,255,5,0.1)]">
+                      <CurrentIcon size={32} />
+                   </div>
+                   <span className="text-[#D2FF05] font-mono text-sm tracking-[0.2em] uppercase font-bold">
+                     {currentSlide === 0 ? 'VISION' : currentSlide === 12 ? 'FUTURE' : 'INTELLIGENCE LAYER'}
+                   </span>
+                </div>
+                
+                <h1 className="text-5xl md:text-6xl lg:text-7xl font-black uppercase leading-[0.9] tracking-tighter mb-6 text-white drop-shadow-2xl">
+                  {slides[currentSlide].title}
+                </h1>
+                <h2 className="text-xl md:text-2xl text-[#9AD153] font-medium tracking-wide max-w-2xl leading-relaxed">
+                  {slides[currentSlide].sub}
+                </h2>
+              </div>
+            )}
+
+            {/* Content / Bullets */}
+            <div className="flex-1 relative z-10">
+              {loaded && (
+                <ul className="space-y-8">
+                  {slides[currentSlide].bullets.map((bullet, idx) => (
+                    <li key={idx} className={`flex items-start gap-5 text-lg md:text-xl text-gray-300 group animate-fade-up`} style={{ animationDelay: `${(idx + 1) * 150}ms` }}>
+                      <div className="mt-2.5 w-12 h-[2px] bg-[#303E47] group-hover:bg-[#D2FF05] group-hover:w-16 transition-all duration-300 relative overflow-hidden">
+                        <div className="absolute top-0 left-0 h-full w-full bg-[#D2FF05] -translate-x-full group-hover:translate-x-0 transition-transform duration-500"></div>
+                      </div>
+                      <span className="leading-relaxed group-hover:text-white transition-colors duration-300">
+                        {bullet.split(':')[0]}<span className="text-[#D2FF05] font-bold mx-1">{bullet.includes(':') ? ':' : ''}</span>
+                        {bullet.split(':')[1]}
+                      </span>
+                    </li>
+                  ))}
+                </ul>
+              )}
+            </div>
+
+            {/* Large Visual Watermark */}
+            <div className="absolute right-[-50px] bottom-[-50px] opacity-5 pointer-events-none mix-blend-overlay rotate-12 scale-150 transition-transform duration-1000">
+               {currentSlide === 0 || currentSlide === 12 ? (
+                 <img src="https://iili.io/KUXIzXV.png" className="w-[600px] h-auto grayscale invert brightness-200" alt="Watermark" />
+               ) : (
+                 <CurrentIcon size={500} strokeWidth={0.5} />
+               )}
+            </div>
+
+            {/* Pro Tip Toggle */}
+            <div className="absolute bottom-8 right-8 z-30 flex gap-4">
+               {/* Presenter Mode Button */}
+               <button 
+                 onClick={() => setShowTip(!showTip)}
+                 className={`flex items-center gap-2 text-xs font-mono px-4 py-2 rounded-full border transition-all ${showTip ? 'border-[#D2FF05] text-[#D2FF05] bg-[#D2FF05]/10' : 'border-gray-700 text-gray-500 hover:border-gray-500'}`}
+               >
+                 <Lightbulb size={14} /> SPEAKER NOTE
+               </button>
+               
+               {showTip && (
+                 <div className="absolute bottom-12 right-0 w-80 glass-panel border-t-2 border-t-[#D2FF05] p-6 rounded-lg shadow-[0_20px_50px_rgba(0,0,0,0.7)] animate-fade-up">
+                   <div className="text-[#6F7C84] text-[10px] font-bold tracking-widest mb-2 uppercase">Talking Point</div>
+                   <p className="text-white text-sm font-medium leading-relaxed">"{slides[currentSlide].tip}"</p>
+                 </div>
+               )}
+            </div>
+        </div>
+      </div>
+
+      {/* Navigation Controls */}
+      <div className="flex gap-6 mt-10 z-10">
+        <button 
+          onClick={prevSlide}
+          disabled={currentSlide === 0}
+          className="group px-8 py-3 rounded-sm bg-transparent border border-[#303E47] text-gray-400 hover:text-white hover:border-white disabled:opacity-20 transition-all uppercase tracking-widest text-xs font-bold flex items-center gap-2"
+        >
+          <ChevronLeft size={16} className="group-hover:-translate-x-1 transition-transform" /> Prev
+        </button>
+        <button 
+          onClick={nextSlide}
+          disabled={currentSlide === slides.length - 1}
+          className="group px-8 py-3 rounded-sm bg-[#D2FF05] text-black font-bold border border-[#D2FF05] hover:bg-white hover:border-white hover:scale-105 transition-all shadow-[0_0_20px_rgba(210,255,5,0.2)] uppercase tracking-widest text-xs flex items-center gap-2"
+        >
+          Next <ChevronRight size={16} className="group-hover:translate-x-1 transition-transform" />
+        </button>
+      </div>
+
+    </div>
+  );
+};
+
+export default PitchDeck;
