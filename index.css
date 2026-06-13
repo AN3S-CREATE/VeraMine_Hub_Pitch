@@ -1,0 +1,5 @@
+@import "tailwindcss";
+
+/* Ensure Tailwind scans the JSX source committed as index.html for class names. */
+@source "./index.html";
+@source "./main.jsx";
